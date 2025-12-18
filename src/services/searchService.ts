@@ -15,11 +15,11 @@ export const searchService = {
       const result = await embeddingModel.embedContent(query);
       const vetor = result.embedding.values;
 
-      // 2. Chamar a função RPC no Supabase
-      const { data,bP_error: error } = await supabase.rpc('buscar_gastos', {
+      // 2. Chamar a função RPC no Supabase (CORRIGIDO AQUI)
+      const { data, error } = await supabase.rpc('buscar_gastos', {
         query_embedding: vetor,
-        match_threshold: 0.1, // Nível de similaridade (0.1 a 1.0)
-        match_count: 1,       // Top 5 resultados
+        match_threshold: 0.1, 
+        match_count: 5,       
         p_user_id: userId
       });
 
@@ -31,7 +31,6 @@ export const searchService = {
       return {
         success: true,
         data: data || [],
-        // Retornamos também uma string formatada para facilitar o uso no Agente de IA depois
         contexto: data && data.length > 0 
           ? JSON.stringify(data) 
           : "Nenhum gasto encontrado com esses termos."
