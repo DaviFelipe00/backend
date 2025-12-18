@@ -1,44 +1,24 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    // File Layout
-    // "rootDir": "./src",
-    // "outDir": "./dist",
+    // --- 1. Pastas do Projeto (Essenciais) ---
+    "rootDir": "./src",      // Onde está seu código
+    "outDir": "./dist",      // Para onde vai o código compilado
 
-    // Environment Settings
-    // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
-    "types": [],
-    // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
-    // and npm install -D @types/node
+    // --- 2. Configuração de Módulos (Para usar 'import' sem erro) ---
+    "target": "es2020",      // Versão moderna do JavaScript
+    "module": "commonjs",    // Converte seus imports para o padrão do Node.js
+    "moduleResolution": "node",
+    "esModuleInterop": true, // Permite importar pacotes CommonJS (ex: express) como ESM
 
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+    // --- 3. Qualidade do Código ---
+    "strict": true,          // Ativa verificações rigorosas (evita bugs bobos)
+    "skipLibCheck": true,    // Ignora erros dentro dos node_modules (acelera a compilação)
+    "forceConsistentCasingInFileNames": true, // Evita erros de maiúsculas/minúsculas
 
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    // Style Options
-    // "noImplicitReturns": true,
-    // "noImplicitOverride": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    // "noFallthroughCasesInSwitch": true,
-    // "noPropertyAccessFromIndexSignature": true,
-
-    // Recommended Options
-    "strict": true,
-    "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
-    "skipLibCheck": true,
-  }
+    // --- 4. Outros ---
+    "sourceMap": true,       // Ajuda no debug
+    "resolveJsonModule": true // Permite importar arquivos .json se precisar
+  },
+  "include": ["src/**/*"],   // Compilar tudo dentro de src
+  "exclude": ["node_modules"] // Não compilar a pasta de dependências
 }
