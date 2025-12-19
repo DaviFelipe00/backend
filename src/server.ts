@@ -2,26 +2,38 @@ import express from 'express';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 import apiRoutes from './routes/api.routes';
+import { authMiddleware } from './middlewares/authMiddleware'; 
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors()); // Permite que o n8n ou frontend acessem
-app.use(express.json()); // Permite ler JSON no corpo da requisição
+// --- Middlewares Globais ---
+app.use(cors()); // Permite acesso externo
+app.use(express.json()); // Lê JSON
 
-// Rotas
-app.use('/api', apiRoutes);
+// --- Rotas ---
 
-// Rota de teste simples
+// Rota Pública (Health Check) - Ótima para saber se o server caiu sem precisar de senha
 app.get('/', (req, res) => {
   res.send('🚀 API Financeira está rodando!');
 });
 
-// Inicia o servidor
+// CORREÇÃO 2: Aplicando a segurança apenas nas rotas da API
+// Agora, tudo que for /api/... vai passar pelo "porteiro" (authMiddleware) antes
+app.use('/api', authMiddleware, apiRoutes);
+
+// --- Tratamento de Erros Global (Recomendado) ---
+// Adicione isso no final para evitar que o servidor trave silenciosamente
+app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('🔥 Erro no servidor:', err);
+  res.status(500).json({ error: 'Erro interno no servidor.' });
+});
+
+// --- Iniciar Servidor ---
 app.listen(PORT, () => {
   console.log(`\n⚡ Servidor rodando em: http://localhost:${PORT}`);
-  console.log(`👉 Rota de busca: POST http://localhost:${PORT}/api/busca-vetorial\n`);
+  console.log(`👉 Rota segura: POST http://localhost:${PORT}/api/busca-vetorial`);
+  console.log(`🔓 Rota pública: GET http://localhost:${PORT}/\n`);
 });
