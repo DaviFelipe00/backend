@@ -9,5 +9,8 @@ if (!process.env.GEMINI_API_KEY) {
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Importante: O modelo DEVE ser o mesmo que usamos para criar os dados (text-embedding-004)
+// Modelo para criar vetores (Embeddings)
 export const embeddingModel = genAI.getGenerativeModel({ model: "text-embedding-004" });
+
+// NOVO: Modelo para gerar texto/respostas (Rápido e Barato)
+export const chatModel = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
